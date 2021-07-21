@@ -2,11 +2,10 @@
 Allows for the spike timing analysis and comparison across multiple Fall.mat output files from suite2p.
 
 # Instructions for use
-In order to use tosinglecell.mat, the script must be placed within the same folder containing the Fall.mat files for a specific animal. 
+In order to use tosinglecell.mat, add Place-Cell-Analysis-Hippocampus directory to you matlab path. 
 
-For example, if we have an animal called ID35, there should be a folder called ID35 that contains Fall1.mat, Fall2.mat,... each containing 1 session worth of data.
+tosinglecell.mat will search the current directory in hippocampusNew for the folders containing the ID of the mouse and session. For example, it can be run in the 13-15_month_APPxGCaMP folder.  
 
-tosinglecell.mat will ask the user for the number of sessions conducted on the animal (i.e. number of Fall.mat files) search the current path for these Fall.mat files in order and then output the individual cell spike times files in a folder called Spiketimingsn where n corresponds to which Fallmatn.mat file the script was analysing.
+![image](https://user-images.githubusercontent.com/70510030/126143710-aed28dad-0a38-4a25-aac4-52fa6440d65f.png)
 
-At the end, if we had for example an animal with 2 sessions worth of data, the file pathway will appear as such:
-ID35 -> Fall1.mat, Fall2.mat, tosinglecell.mat, Individual Cell Spike Times 1 -> cell0001.mat, cell0002.mat etc, Individual Cell Spike Times 2 -> cell0001.mat, cell0002.mat etc.
+The code will loop through each folder, extract the spike times of each cell and save them in a new directory called "Individual spike timings" (inside the ID35_20210404 folder). 
