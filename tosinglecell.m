@@ -1,5 +1,4 @@
-%This program takes a completed folder for a specific animal i.e. ID35, where its
-%data for each day/session is named as Fall1.mat, Fall2.mat...etc. and
+%This program takes a completed folder of recordings of multiple animals ie the 13-15month_APPxGCaMP foler , 
 %outputs a .mat file containing a cell array for each cell comprising of
 %the cells x, y coordinate, spike timing. The index of each cell is aligned
 %in each of the output files.
@@ -56,7 +55,7 @@ for row = 1:size(dates, 1)
 
 
                         %if 
-                        if ((cellarray1.med(1) < cellarray2.med(1)+5 && cellarray1.med(1) > cellarray2.med(1)-5) && (cellarray1.med(2) < cellarray2.med(2)+5 && cellarray1.med(2) > cellarray2.med(2)-5))
+                        if ((cellarray1.med(1) < cellarray2.med(1)+2 && cellarray1.med(1) > cellarray2.med(1)-2) && (cellarray1.med(2) < cellarray2.med(2)+2 && cellarray1.med(2) > cellarray2.med(2)-2))
                             spiketimes(j,:) = spikes(i,:); 
                             count = 1;
 
@@ -77,21 +76,26 @@ for row = 1:size(dates, 1)
         mkdir('Individual Cell Spike Times ');
 
         cd('Individual Cell Spike Times ');
-        size(spiketimes, 1)
-
+        
+        %storesindexes of all inactive cells currently in spiketimes
+        inactive_cellindex = all(spiketimes == 0, 2)
+        
         % cell is the iterator. cellspike temporarily stores row represnting a
         % particular cell.
         for cell = 1:size(spiketimes, 1)
-            indi_cellspike = spiketimes(cell,:);
-            if cell < 10
-                save(strcat('Cell000', string(cell)), 'indi_cellspike');
-            elseif cell < 100 & cell >= 10 
-                save(strcat('Cell00', string(cell)), 'indi_cellspike');
-            elseif cell < 1000 & cell >= 100
-                save(strcat('Cell0', string(cell)), 'indi_cellspike');
-            elseif cell >= 1000 
-                save(strcat('Cell', string(cell)), 'indi_cellspike');
-            end 
+            
+            if inactive_cellindex(cell) == 0
+                indi_cellspike = spiketimes(cell,:);
+                if cell < 10
+                    save(strcat('Cell000', string(cell)), 'indi_cellspike');
+                elseif cell < 100 & cell >= 10 
+                    save(strcat('Cell00', string(cell)), 'indi_cellspike');
+                elseif cell < 1000 & cell >= 100
+                    save(strcat('Cell0', string(cell)), 'indi_cellspike');
+                elseif cell >= 1000 
+                    save(strcat('Cell', string(cell)), 'indi_cellspike');
+                end 
+            end
         end
 
         cd '..';  

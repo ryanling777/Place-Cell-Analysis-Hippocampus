@@ -55,7 +55,7 @@ for row = 1:size(dates, 1)
                         cellarray2 = cellMaster{j}; 
 
 
-
+                        %if 
                         if ((cellarray1.med(1) < cellarray2.med(1)+5 && cellarray1.med(1) > cellarray2.med(1)-5) && (cellarray1.med(2) < cellarray2.med(2)+5 && cellarray1.med(2) > cellarray2.med(2)-5))
                             spiketimes(j,:) = spikes(i,:); 
                             count = 1;
@@ -77,21 +77,26 @@ for row = 1:size(dates, 1)
         mkdir('Individual Cell Spike Times ');
 
         cd('Individual Cell Spike Times ');
-        size(spiketimes, 1)
-
+        
+        %storesindexes of all inactive cells currently in spiketimes
+        inactive_cellindex = all(spiketimes == 0, 2);
+        
         % cell is the iterator. cellspike temporarily stores row represnting a
         % particular cell.
         for cell = 1:size(spiketimes, 1)
-            indi_cellspike = spiketimes(cell,:);
-            if cell < 10
-                save(strcat('Cell000', string(cell)), 'indi_cellspike');
-            elseif cell < 100 & cell >= 10 
-                save(strcat('Cell00', string(cell)), 'indi_cellspike');
-            elseif cell < 1000 & cell >= 100
-                save(strcat('Cell0', string(cell)), 'indi_cellspike');
-            elseif cell >= 1000 
-                save(strcat('Cell', string(cell)), 'indi_cellspike');
-            end 
+            
+            if inactive_cellindex(cell) == 0
+                indi_cellspike = spiketimes(cell,:);
+                if cell < 10
+                    save(strcat('Cell000', string(cell)), 'indi_cellspike');
+                elseif cell < 100 & cell >= 10 
+                    save(strcat('Cell00', string(cell)), 'indi_cellspike');
+                elseif cell < 1000 & cell >= 100
+                    save(strcat('Cell0', string(cell)), 'indi_cellspike');
+                elseif cell >= 1000 
+                    save(strcat('Cell', string(cell)), 'indi_cellspike');
+                end 
+            end
         end
 
         cd '..';  
