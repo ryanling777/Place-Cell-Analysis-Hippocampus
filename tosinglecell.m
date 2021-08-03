@@ -12,8 +12,15 @@ cellMaster = {};
 
 %importing the cell information into the script. 
 
-%have to clearvars after each row (each row is a new id)
+
 for row = 1:size(dates, 1)
+    %Fetching the matching data. The matching Github code file should be
+    %stored in a folder called 'Matches' and named 'ID35'(Mouse's ID).
+    cd 'Matches';
+    load(ids{row});
+    cd '..';
+    matches = roiMatchData.mapping;%the original indexes.
+    matchescopy = roiMatchData.mapping; %this will be amended with the new cell index.
     
     for column = 1:size(dates, 2)
     
@@ -21,7 +28,7 @@ for row = 1:size(dates, 1)
             directory = strcat(ids{row}, '_', dates{row,column});
             cd(directory);
 
-            load('Fall.mat')
+            load('Fall.mat');
             cellIndex = find(iscell(:,1)==1); %indexes of all cells.
             alldata = stat;
             cellData = cell(size(cellIndex,1), 1);
@@ -31,7 +38,7 @@ for row = 1:size(dates, 1)
                 cellData{i} = alldata{cellIndex(i)}; %celldata contains all the cell data that are cells
 
             end
-
+            size(cellMaster,1)
 
             if column == 1 %if this is the first file
                     cellMaster = cellData;
@@ -39,35 +46,67 @@ for row = 1:size(dates, 1)
             else 
                 
 
-                originalnum = size(cellMaster, 1)
-                size(cellData, 1)
+                originalnum = size(cellMaster, 1);
+                size(cellData, 1);
 
 
                 spiketimes = zeros(originalnum, 24884); %24884 is number of frames.
 
-
+                
                 for i = 1:size(cellData, 1)
-                    cellarray1 = cellData{i}; %accessing the structs holding coordinate data
-                    count = 0; %flag to indicate whether cell has already been recognised from previous sessions.
-                    j = 1;
-                    while count == 0 && j <= originalnum
-                        cellarray2 = cellMaster{j}; 
-
-
-                        %if 
-                        if ((cellarray1.med(1) < cellarray2.med(1)+2 && cellarray1.med(1) > cellarray2.med(1)-2) && (cellarray1.med(2) < cellarray2.med(2)+2 && cellarray1.med(2) > cellarray2.med(2)-2))
-                            spiketimes(j,:) = spikes(i,:); 
-                            count = 1;
-
-                        end
-                        j = j+1;
+                    
+                    cellarray1 = cellData{i};
+                    count = 0;%indicates if the current cell has a match in matches.
+                    
+                    
+                    
+                    [r, c] = find(matches == i);
+                    
+                    %getting the index of the row in matched the cell is
+                    %located at. (stored in j)
+                    index = find(c == column);
+                    
+                    if index
+                        count = 1;
+                        rowno = r(index);
                     end
-                    if count == 0 && j == originalnum + 1
+                    
+                    flag1 = 1; %to keep track if there are no matches to the left.
+                    k = column - 1;
+                    %if there is a match, rown will hold the index of the cell
+                    %in matches whose column contains that match.
+                    if count == 1
+                    
+                        while (k >= 1) & (matchescopy(rowno(1),k)==0)  
+                            k = k - 1;
+                            flag1 = flag1 + 1;
+                        end 
+                        
+                        if flag1 ~= column
+                            
+                            spiketimes(matchescopy(rowno(1),k), :) = spikes(matchescopy(rowno(1),column),:);
+
+                            matchescopy(rowno(1),column) = matchescopy(rowno(1),k); %to keep track of the cells. 
+                        end
+                    end
+                    
+                    %if no matches are found or this is the start of the
+                    %match, i.e. if  we have 3 sessions, the loop is in the
+                    %second session and the matches are in session 2 and 3.
+                    if count == 0 | flag1 == column
 
 
                         cellMaster{end+1} = cellarray1; %adds new cell to the end
                         spiketimes(end+1, :) = spikes(i, :);
+                        if flag1 == column
+                            for a = 1:length(rowno)
+                                matchescopy(rowno(a), column) = size(cellMaster, 1); %if this is the start of a match, we put the new cell index inside the matches array.
+                            end
+                        end
+                        
+                        
                     end
+                end
                 end
             end
        
@@ -78,7 +117,7 @@ for row = 1:size(dates, 1)
         cd('Individual Cell Spike Times ');
         
         %storesindexes of all inactive cells currently in spiketimes
-        inactive_cellindex = all(spiketimes == 0, 2)
+        inactive_cellindex = all(spiketimes == 0, 2);
         
         % cell is the iterator. cellspike temporarily stores row represnting a
         % particular cell.
@@ -100,12 +139,12 @@ for row = 1:size(dates, 1)
 
         cd '..';  
         cd '..';
-        clearvars -except cellMaster dates ids row column;
+        clearvars -except cellMaster dates ids row column matches matchescopy;
 
         end
     end
     
-end
+
         
         
     
