@@ -19,8 +19,9 @@ for row = 1:size(dates, 1)
     cd 'Matches';
     load(ids{row});
     cd '..';
-    matches = roiMatchData.mapping;%the original indexes.
-    matchescopy = roiMatchData.mapping; %this will be amended with the new cell index.
+    removeduplicates
+    matches = noduplicates;%the original indexes.
+    matchescopy = noduplicates; %this will be amended with the new cell index.
     
     for column = 1:size(dates, 2)
     
@@ -38,7 +39,7 @@ for row = 1:size(dates, 1)
                 cellData{i} = alldata{cellIndex(i)}; %celldata contains all the cell data that are cells
 
             end
-            size(cellMaster,1)
+            
 
             if column == 1 %if this is the first file
                     cellMaster = cellData;
