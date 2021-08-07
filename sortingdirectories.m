@@ -8,35 +8,30 @@
 % ID 35      | 20210507 ...
 % ID 37      | 20210507 ...
 
-list = ls
+list = dir;
 numfiles = 0;
 numanimals = 0; 
 ids = {};
 
 
-for char = 1:length(list)-1
-    if list(char) == 'I' && list(char+1) == 'D'
-        temp = strcat(list(char), list(char+1), list(char+2), list(char+3));
+for i = 1:size(list,1)
+    current_folder = list(i).name;
+    if  current_folder(1) == 'I' && current_folder(2) == 'D'
+        temp = strcat(current_folder(1), current_folder(2), current_folder(3), current_folder(4));
         
         if isempty(ids)
             numfiles = numfiles + 1;
             numanimals = numanimals + 1;
             ids{numanimals} = temp;
-            dates{numanimals, numfiles} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
+            dates{numanimals, numfiles} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
             
         else
 
-%             if temp == ids{numanimals} %if animal already exists.
-%                 numfiles = numfiles + 1;
-%                 
-%                 dates{numanimals,numfiles} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
-%                
-%             else% if animal doesn't already exist
                 flag = 0;
                 for i = 1:length(ids)
                     if temp == ids{i}
                         numfiles = numfiles + 1;
-                        dates{i, end+1} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
+                        dates{i, end+1} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
                         flag = 1;
                     end
                         
@@ -46,7 +41,7 @@ for char = 1:length(list)-1
                     numfiles = 1;
                     numanimals = numanimals + 1;
                     ids{numanimals} = temp;
-                    dates{numanimals, numfiles} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
+                    dates{numanimals, numfiles} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
 
                 end
             end
