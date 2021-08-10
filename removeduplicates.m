@@ -3,6 +3,7 @@
 %should simplify to 13 68 35.
 
 data = roiMatchData.mapping;
+
 nonzerosignal = all(data == 0, 2);
 indexes = find(nonzerosignal(:,1)==0);
 nonzero = data(indexes, :);
@@ -11,7 +12,7 @@ noduplicatesref = noduplicates;
 
 
 for j = 1:size(noduplicates,2)
-    i = 1
+    i = 1;
     while i<=size(noduplicates,1)-1
         i
         if noduplicates(i,j) ~= 0
@@ -44,7 +45,7 @@ for j = 1:size(noduplicates,2)
         end
 
     end
-    'here'
+    
     noduplicates = sortrows(noduplicates,j);
 end
             

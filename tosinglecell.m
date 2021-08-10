@@ -30,6 +30,7 @@ for row = 1:size(dates, 1)
             cd(directory);
 
             load('Fall.mat');
+ 
             cellIndex = find(iscell(:,1)==1); %indexes of all cells.
             alldata = stat;
             cellData = cell(size(cellIndex,1), 1);
@@ -127,13 +128,25 @@ for row = 1:size(dates, 1)
             if inactive_cellindex(cell) == 0
                 indi_cellspike = spiketimes(cell,:);
                 if cell < 10
-                    save(strcat('Cell000', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell000', string(cell)));
+                    cd(strcat('Cell000', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 elseif cell < 100 & cell >= 10 
-                    save(strcat('Cell00', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell00', string(cell)));
+                    cd(strcat('Cell00', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 elseif cell < 1000 & cell >= 100
-                    save(strcat('Cell0', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell0', string(cell)));
+                    cd(strcat('Cell0', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 elseif cell >= 1000 
-                    save(strcat('Cell', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell', string(cell)));
+                    cd(strcat('Cell', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 end 
             end
         end

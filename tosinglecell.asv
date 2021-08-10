@@ -19,8 +19,9 @@ for row = 1:size(dates, 1)
     cd 'Matches';
     load(ids{row});
     cd '..';
-    matches = roiMatchData.mapping;%the original indexes.
-    matchescopy = roiMatchData.mapping; %this will be amended with the new cell index.
+    removeduplicates
+    matches = noduplicates;%the original indexes.
+    matchescopy = noduplicates; %this will be amended with the new cell index.
     
     for column = 1:size(dates, 2)
     
@@ -29,6 +30,7 @@ for row = 1:size(dates, 1)
             cd(directory);
 
             load('Fall.mat');
+ 
             cellIndex = find(iscell(:,1)==1); %indexes of all cells.
             alldata = stat;
             cellData = cell(size(cellIndex,1), 1);
