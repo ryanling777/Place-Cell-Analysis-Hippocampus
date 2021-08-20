@@ -1,10 +1,12 @@
 %This program takes a completed folder of recordings of multiple animals ie the 13-15month_APPxGCaMP foler , 
 %outputs a .mat file containing a cell array for each cell comprising of
-%the cells x, y coordinate, spike timing. The index of each cell is aligned
-%in each of the output files.
+%the cell's spike timing. The index of each cell is aligned
+%in each of the output files. 
 
-%From each session a cell array is produced with each cell containing a
-%structure array with info about that cell. 
+
+%At the end of runtime, a celltracking.matfile is produced containing a
+%record of the cell indexing. As a guide, the row number corresponds to the
+%cell index and each digit corresponds to the the nth cell (Not ROI no.)
 
 sortingdirectories
 %cell array containing all known cell info and corresponding cell indexes.
@@ -35,6 +37,7 @@ for row = 1:size(dates, 1)
             alldata = stat;
             cellData = cell(size(cellIndex,1), 1);
             spikes = spks(cellIndex, :);
+            
 
             for i = 1:size(cellData, 1)
                 cellData{i} = alldata{cellIndex(i)}; %celldata contains all the cell data that are cells
@@ -45,12 +48,15 @@ for row = 1:size(dates, 1)
             if column == 1 %if this is the first file
                     cellMaster = cellData;
                     spiketimes = spikes;
+                    trackingdata = zeros(size(cellData, 1), size(dates, 2)); 
+                    for i = 1:size(trackingdata,1)
+                        trackingdata(i,1) = i; %because first file sets precedent.
+                    end
             else 
                 
 
                 originalnum = size(cellMaster, 1);
-                size(cellData, 1);
-
+                
 
                 spiketimes = zeros(originalnum, 24884); %24884 is number of frames.
 
@@ -65,7 +71,7 @@ for row = 1:size(dates, 1)
                     [r, c] = find(matches == i);
                     
                     %getting the index of the row in matched the cell is
-                    %located at. (stored in j)
+                    %located at. (specific to session)
                     index = find(c == column);
                     
                     if index
@@ -75,7 +81,7 @@ for row = 1:size(dates, 1)
                     
                     flag1 = 1; %to keep track if there are no matches to the left.
                     k = column - 1;
-                    %if there is a match, rown will hold the index of the cell
+                    %if there is a match, rown0 will hold the index of the cell
                     %in matches whose column contains that match.
                     if count == 1
                     
@@ -87,6 +93,7 @@ for row = 1:size(dates, 1)
                         if flag1 ~= column
                             
                             spiketimes(matchescopy(rowno(1),k), :) = spikes(matchescopy(rowno(1),column),:);
+                            trackingdata(matchescopy(rowno(1),k),column) = i;
 
                             matchescopy(rowno(1),column) = matchescopy(rowno(1),k); %to keep track of the cells. 
                         end
@@ -94,11 +101,13 @@ for row = 1:size(dates, 1)
                     
                     %if no matches are found or this is the start of the
                     %match, i.e. if  we have 3 sessions, the loop is in the
-                    %second session and the matches are in session 2 and 3.
+                    %second session and the matches are in session 2 and 3
+                    %etc.
                     if count == 0 | flag1 == column
 
 
                         cellMaster{end+1} = cellarray1; %adds new cell to the end
+                        trackingdata(size(cellMaster, 1),column) = i;
                         spiketimes(end+1, :) = spikes(i, :);
                         if flag1 == column
                             for a = 1:length(rowno)
@@ -128,22 +137,35 @@ for row = 1:size(dates, 1)
             if inactive_cellindex(cell) == 0
                 indi_cellspike = spiketimes(cell,:);
                 if cell < 10
-                    save(strcat('Cell000', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell000', string(cell)));
+                    cd(strcat('Cell000', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 elseif cell < 100 & cell >= 10 
-                    save(strcat('Cell00', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell00', string(cell)));
+                    cd(strcat('Cell00', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 elseif cell < 1000 & cell >= 100
-                    save(strcat('Cell0', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell0', string(cell)));
+                    cd(strcat('Cell0', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 elseif cell >= 1000 
-                    save(strcat('Cell', string(cell)), 'indi_cellspike');
+                    mkdir(strcat('Cell', string(cell)));
+                    cd(strcat('Cell', string(cell)));
+                    save('spiketrain', 'indi_cellspike');
+                    cd '..';
                 end 
             end
         end
 
         cd '..';  
         cd '..';
-        clearvars -except cellMaster dates ids row column matches matchescopy;
-
-        end
+        clearvars -except cellMaster dates ids row column matches matchescopy trackingdata;
+        size(cellMaster,1)
+    end
+        save(strcat('CellTracking_', ids{row}), 'trackingdata');
     end
     
 

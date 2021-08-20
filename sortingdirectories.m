@@ -23,7 +23,9 @@ for i = 1:size(list,1)
             numfiles = numfiles + 1;
             numanimals = numanimals + 1;
             ids{numanimals} = temp;
-            dates{numanimals, numfiles} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
+            
+            
+            dates{numanimals, numfiles} = current_folder(6:end); %strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
             
         else
 
@@ -31,7 +33,7 @@ for i = 1:size(list,1)
                 for i = 1:length(ids)
                     if temp == ids{i}
                         numfiles = numfiles + 1;
-                        dates{i, end+1} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
+                        dates{i, end+1} = current_folder(6:end);%strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
                         flag = 1;
                     end
                         
@@ -41,7 +43,7 @@ for i = 1:size(list,1)
                     numfiles = 1;
                     numanimals = numanimals + 1;
                     ids{numanimals} = temp;
-                    dates{numanimals, numfiles} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
+                    dates{numanimals, numfiles} = current_folder(6:end);%strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
 
                 end
             end

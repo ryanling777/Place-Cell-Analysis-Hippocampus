@@ -14,7 +14,7 @@ noduplicatesref = noduplicates;
 for j = 1:size(noduplicates,2)
     i = 1;
     while i<=size(noduplicates,1)-1
-        i
+        
         if noduplicates(i,j) ~= 0
                 
             if noduplicates(i,j) == noduplicates(i+1,j)

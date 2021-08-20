@@ -17,13 +17,15 @@ ids = {};
 for i = 1:size(list,1)
     current_folder = list(i).name;
     if  current_folder(1) == 'I' && current_folder(2) == 'D'
-        temp = strcat(current_folder(1), urrent_folder(1), urrent_folder(1), current_folder(1));
+        temp = strcat(current_folder(1), current_folder(2), current_folder(3), current_folder(4));
         
         if isempty(ids)
             numfiles = numfiles + 1;
             numanimals = numanimals + 1;
             ids{numanimals} = temp;
-            dates{numanimals, numfiles} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
+            
+            
+            dates{numanimals, numfiles} = current_folder(6:end); %strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
             
         else
 
@@ -31,7 +33,7 @@ for i = 1:size(list,1)
                 for i = 1:length(ids)
                     if temp == ids{i}
                         numfiles = numfiles + 1;
-                        dates{i, end+1} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
+                        dates{i, end+1} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
                         flag = 1;
                     end
                         
@@ -41,7 +43,7 @@ for i = 1:size(list,1)
                     numfiles = 1;
                     numanimals = numanimals + 1;
                     ids{numanimals} = temp;
-                    dates{numanimals, numfiles} = strcat(list(char+5), list(char+6), list(char+7), list(char+8), list(char+9), list(char+10), list(char+11), list(char+12));
+                    dates{numanimals, numfiles} = strcat(current_folder(6), current_folder(7), current_folder(8), current_folder(9), current_folder(10), current_folder(11), current_folder(12), current_folder(13));
 
                 end
             end
