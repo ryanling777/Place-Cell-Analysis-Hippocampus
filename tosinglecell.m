@@ -32,8 +32,9 @@ for row = 1:size(dates, 1)
             cd(directory);
 
             load('Fall.mat');
- 
+            
             cellIndex = find(iscell(:,1)==1); %indexes of all cells.
+            
             alldata = stat;
             cellData = cell(size(cellIndex,1), 1);
             spikes = spks(cellIndex, :);
@@ -163,7 +164,7 @@ for row = 1:size(dates, 1)
         cd '..';  
         cd '..';
         clearvars -except cellMaster dates ids row column matches matchescopy trackingdata;
-        size(cellMaster,1)
+        
     end
         save(strcat('CellTracking_', ids{row}), 'trackingdata');
     end
